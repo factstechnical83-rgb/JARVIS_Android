@@ -16,14 +16,12 @@ jobs:
       - name: Unzip Project Files
         run: |
           unzip -o JARVIS--main.zip -d extracted_project
-          # ZIP ke andar JARVIS--main folder hai, uski files root me lana
           if [ -d "extracted_project/JARVIS--main" ]; then
             cp -r extracted_project/JARVIS--main/* .
           else
             cp -r extracted_project/* .
           fi
           
-          # Environment variables setup
           cat << 'EOF' > .env
           GEMINI_API_KEY=dummy_key_12345
           OPENAI_API_KEY=dummy_key_12345
@@ -56,7 +54,7 @@ jobs:
             ./gradle-9.3.1/bin/gradle wrapper --gradle-version 9.3.1
           fi
           chmod +x gradlew
-          ./gradlew assembleDebug -x lint -x test --no-daemon --stacktrace
+          ./gradlew assembleDebug -Dksp.use.worker.api=false -x lint -x test --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
